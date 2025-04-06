@@ -1,4 +1,7 @@
+// lib/screens/landlord_dashboard.dart
 import 'package:flutter/material.dart';
+import 'package:kodipay_landlord/data/mock_data.dart';
+import 'package:kodipay_landlord/models/activity.dart';
 
 class LandlordDashboard extends StatelessWidget {
   const LandlordDashboard({super.key});
@@ -12,6 +15,26 @@ class LandlordDashboard extends StatelessWidget {
     } else {
       return 'Good Evening';
     }
+  }
+
+  int _calculateTotalTenants() {
+    return mockProperties.fold(0, (sum, property) => sum + property.tenants.length);
+  }
+
+  double _calculateRentCollected() {
+    return mockProperties.fold(0.0, (sum, property) {
+      return sum + property.tenants.fold(0.0, (tenantSum, tenant) {
+        return tenantSum + (tenant.hasPaidThisMonth ? tenant.rentAmount : 0.0);
+      });
+    });
+  }
+
+  double _calculatePendingPayments() {
+    return mockProperties.fold(0.0, (sum, property) {
+      return sum + property.tenants.fold(0.0, (tenantSum, tenant) {
+        return tenantSum + (tenant.hasPaidThisMonth ? 0.0 : tenant.rentAmount);
+      });
+    });
   }
 
   @override
@@ -92,13 +115,13 @@ class LandlordDashboard extends StatelessWidget {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
-                      _buildStatCard('Total Properties', '5', Icons.home),
+                      _buildStatCard('Total Properties', mockProperties.length.toString(), Icons.home),
                       const SizedBox(width: 10),
-                      _buildStatCard('Total Tenants', '12', Icons.person),
+                      _buildStatCard('Total Tenants', _calculateTotalTenants().toString(), Icons.person),
                       const SizedBox(width: 10),
-                      _buildStatCard('Rent Collected', 'KES 150,000', Icons.attach_money),
+                      _buildStatCard('Rent Collected', 'KES ${_calculateRentCollected().toStringAsFixed(0)}', Icons.attach_money),
                       const SizedBox(width: 10),
-                      _buildStatCard('Pending Payments', 'KES 30,000', Icons.warning),
+                      _buildStatCard('Pending Payments', 'KES ${_calculatePendingPayments().toStringAsFixed(0)}', Icons.warning),
                     ],
                   ),
                 ),
@@ -134,35 +157,52 @@ class LandlordDashboard extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Text(
                     'Recent Activity',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 10),
-                  Card(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: ListView(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: const [
-                        ListTile(
-                          leading: Icon(Icons.payment, color: Colors.green),
-                          title: Text('Tenant A paid KES 30,000'),
-                          subtitle: Text('05/04/2025'),
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.build, color: Colors.orange),
-                          title: Text('Maintenance request from Tenant B'),
-                          subtitle: Text('04/04/2025'),
-                        ),
-                      ],
-                    ),
-                  ),
+                  const SizedBox(height: 5),
+                  SizedBox(
+  height: 285, // Adjust height as needed
+  child: Card(
+    color: Colors.white,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(5),
+    ),
+    child: ListView.builder(
+      shrinkWrap: true, // Still useful to avoid unbounded height issues
+      itemCount: mockActivities.length,
+      itemBuilder: (context, index) {
+        final activity = mockActivities[index];
+        return ListTile(
+          leading: Icon(
+            activity.type == ActivityType.payment
+                ? Icons.payment
+                : Icons.build,
+            color: activity.type == ActivityType.payment
+                ? Colors.green
+                : Colors.orange,
+          ),
+          title: Text(activity.title),
+          subtitle: Text(activity.subtitle),
+          onTap: () {
+            if (activity.type == ActivityType.payment) {
+              Navigator.pushNamed(context, '/payments');
+            } else if (activity.type == ActivityType.maintenance) {
+              Navigator.pushNamed(
+                context,
+                '/messages',
+                arguments: activity.relatedId,
+              );
+            }
+          },
+        );
+      },
+    ),
+  ),
+),
                 ],
               ),
             ),

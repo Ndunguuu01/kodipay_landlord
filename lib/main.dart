@@ -1,90 +1,13 @@
+// lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:kodipay_landlord/screens/landlord_dashboard.dart';
-
-// Placeholder screens (to be implemented later)
-class PropertiesScreen extends StatelessWidget {
-  const PropertiesScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Properties')),
-      body: const Center(child: Text('Properties Screen')),
-    );
-  }
-}
-
-class TenantsScreen extends StatelessWidget {
-  const TenantsScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Tenants')),
-      body: const Center(child: Text('Tenants Screen')),
-    );
-  }
-}
-
-class PaymentsScreen extends StatelessWidget {
-  const PaymentsScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Payments')),
-      body: const Center(child: Text('Payments Screen')),
-    );
-  }
-}
-
-class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
-      body: const Center(child: Text('Settings Screen')),
-    );
-  }
-}
-
-class AddPropertyScreen extends StatelessWidget {
-  const AddPropertyScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Add Property')),
-      body: const Center(child: Text('Add Property Screen')),
-    );
-  }
-}
-
-class AddTenantScreen extends StatelessWidget {
-  const AddTenantScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Add Tenant')),
-      body: const Center(child: Text('Add Tenant Screen')),
-    );
-  }
-}
-
-class ReportsScreen extends StatelessWidget {
-  const ReportsScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Reports')),
-      body: const Center(child: Text('Reports Screen')),
-    );
-  }
-}
+import 'package:kodipay_landlord/screens/properties.dart';
+import 'package:kodipay_landlord/screens/tenants.dart';
+import 'package:kodipay_landlord/screens/payments.dart';
+import 'package:kodipay_landlord/screens/settings.dart';
+import 'package:kodipay_landlord/screens/add_property.dart';
+import 'package:kodipay_landlord/screens/add_tenant.dart';
+import 'package:kodipay_landlord/screens/reports.dart';
 
 void main() {
   runApp(const MyApp());
